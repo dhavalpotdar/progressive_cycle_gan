@@ -386,4 +386,4 @@ def train_prog_cycle_gan():
         # Reset epoch counter after each step
         last_epoch = 0
 
-    return gen_A2B, gen_B2A
+    return WORKING_DIR, gen_A2B, gen_B2A

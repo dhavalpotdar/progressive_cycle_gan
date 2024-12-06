@@ -40,3 +40,14 @@ def load_checkpoint(filepath, gen_A2B, gen_B2A, disc_A, disc_B, opt_gen, opt_dis
     epoch = checkpoint["epoch"]
     print(f"Checkpoint loaded from step {step}, epoch {epoch}.")
     return step, epoch
+
+
+def load_genA2B(filepath, generator):
+
+    checkpoint = torch.load(filepath)
+    generator.load_state_dict(checkpoint["gen_A2B_state_dict"])
+
+    step = checkpoint["step"]
+    epoch = checkpoint["epoch"]
+    print(f"Checkpoint loaded from step {step}, epoch {epoch}.")
+    return generator
