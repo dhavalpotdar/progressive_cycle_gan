@@ -92,7 +92,7 @@ if SOURCE_DATASET == "CIFAR10":
 
 
 elif SOURCE_DATASET == "CELEBA":
-    from input_datasets.celeba import CelebADataset, test_on_celeba
+    from input_datasets.celeba import CelebADataset
 
     celeba_img_dir = "data/CELEBA/img_align_celeba/img_align_celeba"
     celeba_partition_file = "data/CELEBA/list_eval_partition.csv"
