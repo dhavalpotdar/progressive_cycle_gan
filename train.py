@@ -140,7 +140,7 @@ if STYLE_DATASET == "Vangogh":
     )
 
     train_loader_B = DataLoader(
-        vangogh_train_dataset, batch_size=8, shuffle=True, num_workers=0
+        vangogh_train_dataset, batch_size=BATCH_SIZE, shuffle=True, num_workers=0
     )
 
 
