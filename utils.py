@@ -1,6 +1,33 @@
 import os
 import torch
+from torch_fidelity import calculate_metrics
 
+def compute_fid(real_dir, fake_dir):
+    """
+    Compute Fréchet Inception Distance (FID) between real and fake image directories.
+
+    Args:
+        real_dir (str): Path to the directory containing real images.
+        fake_dir (str): Path to the directory containing fake images.
+
+    Returns:
+        float: FID score.
+    """
+    metrics = calculate_metrics(input1=real_dir, input2=fake_dir, fid=True, verbose=True)
+    return metrics["frechet_inception_distance"]
+
+def compute_inception_score(fake_dir):
+    """
+    Compute Inception Score (IS) for fake image directory.
+
+    Args:
+        fake_dir (str): Path to the directory containing fake images.
+
+    Returns:
+        float: Inception score mean.
+    """
+    metrics = calculate_metrics(input1=fake_dir, isc=True, verbose=True)
+    return metrics["inception_score_mean"]
 
 def save_checkpoint(
     path, gen_A2B, gen_B2A, disc_A, disc_B, opt_gen, opt_disc, step, epoch
@@ -42,12 +69,22 @@ def load_checkpoint(filepath, gen_A2B, gen_B2A, disc_A, disc_B, opt_gen, opt_dis
     return step, epoch
 
 
-def load_genA2B(filepath, generator):
 
-    checkpoint = torch.load(filepath)
+def load_genA2B(filepath, generator, device="cuda"):
+    """
+    Loads the generator model's weights from a checkpoint file.
+
+    Args:
+        filepath (str): Path to the checkpoint file.
+        generator (torch.nn.Module): Generator model instance.
+        device (str): Device to load the model onto ("cuda", "cpu", etc.).
+
+    Returns:
+        generator (torch.nn.Module): Generator model with loaded weights.
+    """
+    checkpoint = torch.load(filepath, map_location=device)  # Ensure checkpoint is loaded on the correct device
     generator.load_state_dict(checkpoint["gen_A2B_state_dict"])
-
-    step = checkpoint["step"]
-    epoch = checkpoint["epoch"]
+    step = checkpoint.get("step", None)
+    epoch = checkpoint.get("epoch", None)
     print(f"Checkpoint loaded from step {step}, epoch {epoch}.")
     return generator

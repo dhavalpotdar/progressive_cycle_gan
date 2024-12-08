@@ -2,3 +2,6 @@
 data
 data.zip
 outputs
+eval_images
+checkpoints
+__MACOSX

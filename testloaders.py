@@ -18,7 +18,7 @@ transform = transforms.Compose(
 
 
 # Test on CIFAR10
-def test_on_cifar10(generator, num_steps, img_count=10):
+def test_on_cifar10(generator, num_steps, img_count=10, fake_dir="eval_images/fake"):
 
     cifar10_test = datasets.CIFAR10(
         root="data", train=False, download=True, transform=transform
@@ -35,6 +35,9 @@ def test_on_cifar10(generator, num_steps, img_count=10):
         real_A = real_A.to(device)
         with torch.no_grad():
             fake_B = generator(real_A, alpha=1.0, steps=num_steps - 1)
+        
+        # Save the generated fake image
+        save_image(fake_B * 0.5 + 0.5, os.path.join(fake_dir, f"fake_{i}.png"))
 
         # Optionally plot the results
         fig, axes = plt.subplots(1, 2, figsize=(6, 3))
@@ -53,7 +56,7 @@ def test_on_cifar10(generator, num_steps, img_count=10):
 
 
 # Test on CELEBA
-def test_on_celeba(generator, num_steps, img_count=10):
+def test_on_celeba(generator, num_steps, img_count=10, fake_dir="eval_images/fake"):
     """
     Test the generator on CELEBA test images and save/display results.
 
@@ -86,6 +89,9 @@ def test_on_celeba(generator, num_steps, img_count=10):
         with torch.no_grad():
             fake_B = generator(real_A, alpha=1.0, steps=num_steps - 1)
 
+        # Save the generated fake image
+        save_image(fake_B * 0.5 + 0.5, os.path.join(fake_dir, f"fake_{i}.png"))
+        
         # Optionally plot the results
         fig, axes = plt.subplots(1, 2, figsize=(6, 3))
         axes[0].imshow(real_A[0].permute(1, 2, 0).cpu().numpy() * 0.5 + 0.5)
